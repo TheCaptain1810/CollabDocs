@@ -1,6 +1,6 @@
 'use server';
 
-import { clerkClient } from "@clerk/clerk-sdk-node";
+import { clerkClient } from "@clerk/nextjs/server";
 import { parseStringify } from "../utils";
 import { liveblocks } from "../liveblocks";
 
