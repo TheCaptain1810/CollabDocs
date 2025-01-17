@@ -6,11 +6,12 @@ import { liveblocks } from "../liveblocks";
 
 export const getClerkUsers = async ({ userIds }: { userIds: string[]}) => {
   try {
-    const { data } = await clerkClient.users.getUserList({
+    const clerk = await clerkClient();
+    const { data: clerkUsers } = await clerk.users.getUserList({
       emailAddress: userIds,
     });
 
-    const users = data.map((user) => ({
+    const users = clerkUsers.map((user: any) => ({
       id: user.id,
       name: `${user.firstName} ${user.lastName}`,
       email: user.emailAddresses[0].emailAddress,
@@ -21,7 +22,8 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[]}) => {
 
     return parseStringify(sortedUsers);
   } catch (error) {
-    console.log(`Error fetching users: ${error}`);
+    console.error(`Error fetching users:`, error);
+    throw error;
   }
 }
 
@@ -41,6 +43,7 @@ export const getDocumentUsers = async ({ roomId, currentUser, text }: { roomId: 
 
     return parseStringify(users);
   } catch (error) {
-    console.log(`Error fetching document users: ${error}`);
+    console.error(`Error fetching document users:`, error);
+    throw error;
   }
 }
