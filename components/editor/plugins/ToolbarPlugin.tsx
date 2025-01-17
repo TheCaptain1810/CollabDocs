@@ -12,6 +12,7 @@ import {
   $isRootOrShadowRoot,
   $getSelection,
   $isRangeSelection,
+  $getRoot,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   FORMAT_ELEMENT_COMMAND,
@@ -121,6 +122,21 @@ export default function ToolbarPlugin() {
       return $setBlocksType(selection, () => $createQuoteNode());
     }
   }
+
+  const handleDownload = () => {
+    editor.getEditorState().read(() => {
+      const textContent = $getRoot().getTextContent();
+      const blob = new Blob([textContent], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'document.txt';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    });
+  };
 
   return (
     <div className="toolbar" ref={toolbarRef}>
@@ -246,6 +262,14 @@ export default function ToolbarPlugin() {
       >
         <i className="format justify-align" />
       </button>{' '}
+      <Divider />
+      <button
+        onClick={handleDownload}
+        className="toolbar-item spaced"
+        aria-label="Download Document"
+      >
+        <i className="format download" />
+      </button>
     </div>
   );
 }

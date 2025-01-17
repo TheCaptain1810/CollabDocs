@@ -456,3 +456,7 @@ i.h2 {
 i.h3 {
   background-image: url(/assets/icons/h3.svg);
 }
+
+i.download {
+  background-image: url(/assets/icons/download.svg);
+}
